@@ -11,7 +11,7 @@ redecho() {
     echo -e "\e[31m${input_string}\e[0m"
 }
 enter_to_proceed() {
- 	echo ""
+	echo ""
 	echo "Press Enter for next step..."
 	echo ""
 	read
