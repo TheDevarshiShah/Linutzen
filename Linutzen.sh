@@ -132,7 +132,6 @@ flatpak_apps() {
     echo "-->                         vscodium"
     echo "-->                         meld"
     echo "-->                         Thunderbird"
-    echo "-->                         Tangram"
     echo "-->                         LibreOffice"
     echo "-->                         Zoom"
     echo "-->                         FreeTube"
@@ -148,7 +147,6 @@ flatpak_apps() {
             flatpak install flathub com.vscodium.codium -y
             flatpak install flathub org.gnome.meld -y
             flatpak install flathub org.mozilla.Thunderbird -y
-            flatpak install flathub re.sonny.Tangram -y
             flatpak install flathub org.libreoffice.LibreOffice -y
             flatpak install flathub us.zoom.Zoom -y
             flatpak install flathub io.freetubeapp.FreeTube -y
