@@ -1,5 +1,5 @@
 #!/bin/bash
-##### functions #####
+##### cosmetic functions #####
 print_stars() { # print a line of stars matching the terminal width
     printf '%*s' "$(tput cols)" '' | tr ' ' '*'
 }
@@ -10,11 +10,69 @@ redecho() {
     local input_string=$1
     echo -e "\e[31m${input_string}\e[0m"
 }
+brownecho() {
+    local input_string=$1
+    echo -e "\e[33m${input_string}\e[0m"
+}
+
+
+
+
+
+##### OS Type checker #####
+# Default to no OS selected
+OS_TYPE=""
+
+# Parse command-line arguments
+for arg in "$@"; do
+    case $arg in
+        --fedora)
+            OS_TYPE="FEDORA"
+            shift
+            ;;
+        --ubuntu)
+            OS_TYPE="UBUNTU"
+            shift
+            ;;
+        --update)  
+            OS_TYPE="UPDATES"
+            ### HARD CODED TO UBUNTU FOR NOW
+            redecho "---> apt update && apt upgrade"
+            redecho "---> flatpak update"
+            print_underscores
+            echo ""
+            apt update && apt upgrade
+            print_underscores
+            flatpak update
+            print_stars
+            redecho "A reboot must be done if updates are applied!"
+            exit
+            ;;
+        *)
+            echo -e "\e[31mError: Please specify OS type using --fedora or --ubuntu (or --update)\e[0m"
+            echo "Usage: sudo bash $0 --fedora | --ubuntu | --update"
+            exit 1
+            ;;
+    esac
+done
+
+# Verify OS flag was provided
+if [[ -z "$OS_TYPE" ]]; then
+    echo -e "\e[31mError: Please specify OS type using --fedora or --ubuntu (or --update)\e[0m"
+    echo "Usage: sudo bash $0 --fedora | --ubuntu | --update"
+    exit 1
+fi
+
+
+
+
+
+##### logical functions #####
 enter_to_proceed() {
     echo ""
-    echo "Press Enter for next step..."
-    echo ""
+    printf "Press Enter for next step..."
     read
+    echo ""
 }
 get_integer_input() {
     local input
@@ -43,103 +101,108 @@ get_flag_input() {
 print_menu() {
     print_stars
     echo "Select an option:"
-    echo "0. Initial things BEFORE updates (Fedora only)"
+    echo "0. Initial Things"
     echo "1. Check Updates"
-    echo "2. Setup Flathub (Ubuntu only)"
-    echo "3. Install Flatpak apps"
-    echo "4. Setup Devtools"
-    echo "5. Battery Life optimizations"
+    echo "2. Install Apps"
+    echo "3. Setup Dev Environment"
+    echo "4. Battery Optimizations"
     echo "9. Exit"
 }
-initial(){
+initial() {
     clear
-    echo ">> Initial one-time things to be performed BEFORE updates (Fedora only)"
-    echo ">>> 1. DNF modifications (manual)"
-    echo "-----------------------------------------------"
-    redecho "cp /etc/dnf/dnf.conf /etc/dnf/dnf-original.conf"
-    redecho "# Add following in /etc/dnf/dnf.conf"
-    redecho "fastestmirror=True"
-    redecho "max_parallel_downloads=5"
-    echo "-----------------------------------------------"
-    enter_to_proceed
+    echo ">> Initial one-time thing(s) to be performed:"
 
-    echo ">>> 2. Add Flathub repo"
-    echo "---> flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
-    user_sub_flag=$(get_flag_input)
-    if [[ "$user_sub_flag" == 'Y' ]]; then
-        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    fi
-    enter_to_proceed
-	
-    echo ">>> 3. Install Gnome Tweaks"
-    echo "---> dnf install gnome-tweaks -y"    
-    user_sub_flag=$(get_flag_input)
-    if [[ "$user_sub_flag" == 'Y' ]]; then
-        dnf install gnome-tweaks -y
-    fi
-    print_underscores
-    echo "Done!"
-}
-updates() {
-    clear
-    echo ">> Performing updates"
-    #echo "---- apt update -y && apt upgrade -y && apt autoremove -y"
-    echo "---> dnf update -y"
-    echo "---> flatpak update -y"
-    while true; do
+
+    if [[ "$OS_TYPE" == "FEDORA" ]]; then
+        echo ">>> 1. DNF modifications"
+        echo "DO:--------------------------------------------"
+        brownecho "cp /etc/dnf/dnf.conf /etc/dnf/dnf-original.conf"
+        brownecho "# Add following in /etc/dnf/dnf.conf"
+        brownecho "fastestmirror=True"
+        brownecho "max_parallel_downloads=5"
+        echo "-----------------------------------------------"
+        redecho "A reboot must be done before next step!"
+        
+        enter_to_proceed
+        echo ">>> 2. Install Gnome Tweaks"
+        redecho "---> dnf install gnome-tweaks"    
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            dnf update -y
-            #apt update -y && apt upgrade -y && apt autoremove -y
-            flatpak update -y
-            print_underscores
-            echo "Successfully performed the task!"
-            echo "A reboot must be done if updates are applied!"
-            return
-        elif [[ "$user_flag" == 'N' ]]; then
-            clear
-            return
+            dnf install gnome-tweaks
         fi
-    done
-}
-setup_flathub() {
-    clear
-    echo ">> Setting up Flathub repo (Ubuntu only)"
-    echo "--> apt install flatpak"
-    echo "--> apt install gnome-software-plugin-flatpak"
-    echo "--> flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
-    while true; do
+
+
+    elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
+        echo ">>> 1. Setting up Flathub"
+        redecho "---> apt install flatpak"
+        redecho "---> apt install gnome-software-plugin-flatpak"
+        redecho "---> flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
             apt install flatpak
             apt install gnome-software-plugin-flatpak
             flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-            print_underscores
-            echo "Successfully performed the task!"
-            echo "A reboot must be done!"
-            return
-        elif [[ "$user_flag" == 'N' ]]; then
-            clear
-            return
+            redecho "A reboot must be done!" # before next step!"
         fi
-    done
+
+        enter_to_proceed
+        echo ">>> 2. Install Gnome Tweaks"
+        redecho "---> apt install gnome-tweaks"
+        redecho "---> apt install gnome-tweaks" 
+        user_flag=$(get_flag_input)
+        if [[ "$user_flag" == 'Y' ]]; then
+            apt install gnome-tweaks
+            apt install gnome-tweaks
+        fi
+    fi
+	
+
+    print_underscores
+    echo "Done!"
 }
-flatpak_apps() {
+updates() {
     clear
-    echo ">> Installing Flatpak apps"
-    echo "--> flatpak install flathub com.brave.Browser -y"
-    echo "-->                         firefox"
-    echo "-->                         vscodium"
-    echo "-->                         meld"
-    echo "-->                         Thunderbird"
-    echo "-->                         LibreOffice"
-    echo "-->                         Zoom"
-    echo "-->                         FreeTube"
-    echo "-->                         VLC"
-    echo "-->                         bottles"
-    echo "-->                         ExtensionManager"
-    echo "-->                         Flatseal"
-    while true; do
+    echo ">> Performing updates..."
+
+
+    if [[ "$OS_TYPE" == "FEDORA" ]]; then
+        redecho "---> dnf update"
+        redecho "---> flatpak update"
+        dnf update
+        flatpak update
+        redecho "A reboot must be done if updates are applied!" 
+
+    
+    elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
+        redecho "---> apt update && apt upgrade"
+        redecho "---> flatpak update -y"
+        apt update && apt upgrade
+        flatpak update
+        redecho "A reboot must be done if updates are applied!" 
+    fi
+	
+
+    print_underscores
+    echo "Done!"
+}
+apps() {
+    clear
+    echo ">> Installing Apps:"
+
+
+    if [[ "$OS_TYPE" == "FEDORA" ]]; then
+        redecho "--> flatpak install flathub com.brave.Browser -y"
+        redecho "-->                         firefox"
+        redecho "-->                         vscodium"
+        redecho "-->                         meld"
+        redecho "-->                         Thunderbird"
+        redecho "-->                         LibreOffice"
+        redecho "-->                         Zoom"
+        redecho "-->                         FreeTube"
+        redecho "-->                         VLC"
+        redecho "-->                         bottles"
+        redecho "-->                         ExtensionManager"
+        redecho "-->                         Flatseal"
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
             flatpak install flathub com.brave.Browser -y
@@ -154,124 +217,172 @@ flatpak_apps() {
             flatpak install flathub com.usebottles.bottles -y
             flatpak install flathub com.mattjakeman.ExtensionManager -y
             flatpak install flathub com.github.tchx84.Flatseal -y
-            print_underscores
-            echo "Successfully performed the task!"
-            return
-        elif [[ "$user_flag" == 'N' ]]; then
-            clear
-            return
         fi
-    done
+
+
+    elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
+        redecho "-->snap install brave"
+        redecho "-->             codium --classic"
+        redecho "-->             thunderbird"
+        redecho "-->             libreoffice"
+        redecho "-->             freetube"
+        redecho "-->             vlc"
+        #redecho "-->flatpak install flathub org.gnome.meld -y # no snap"
+        #redecho "-->flatpak install flathub us.zoom.Zoom -y # no snap"
+        #redecho "-->flatpak install flathub com.usebottles.bottles -y # no snap"
+        #redecho "-->flatpak install flathub com.mattjakeman.ExtensionManager -y # no snap"
+
+        user_flag=$(get_flag_input)
+        if [[ "$user_flag" == 'Y' ]]; then
+            snap install brave
+            snap install codium --classic
+            snap install thunderbird
+            snap install libreoffice
+            snap install freetube
+            snap install vlc
+            #flatpak install flathub org.gnome.meld -y # no snap
+            #flatpak install flathub us.zoom.Zoom -y # no snap
+            #flatpak install flathub com.usebottles.bottles -y # no snap
+            #flatpak install flathub com.mattjakeman.ExtensionManager -y # no snap
+
+        fi
+    fi
+
+
+    print_underscores
+    echo "Done!"
 }
 dev_tools() {
     clear
-    echo ">> Setting up Development Environment"
-    echo "A. Git"
-    echo "B. Git SSH Key"
-    echo "C. Conda"
-    echo "D. Docker"
+    echo ">> Setting Dev environment:"
+    
+    echo ">>> 0. Code repo; Setup GitHub Username"
+    echo "DO:----------"
+    brownecho "cd ~"
+    brownecho "mkdir -p Code"
+    echo "-------------"
+    if ! command -v git &> /dev/null; then
+        redecho ">>>> Git is not installed!"
+        redecho "----> apt install git"
+        user_flag=$(get_flag_input)
+        if [[ "$user_flag" == 'Y' ]]; then
+            apt install git
+            print_underscores
+        fi
+    fi
+    brownecho "git config --global user.name \"Devarshi\""
+    brownecho "git config --global user.email \"68741497+TheDevarshiShah@users.noreply.github.com\""
+    echo "----------------------------------------------------------------------------------"
+    enter_to_proceed
+
+    echo ">>> 1. SSH Key-gen for Git"
+    echo "DO:--------------------------------------------------------------------------------------------------------------"
+    brownecho "ssh-keygen -t rsa -b 4096 -C '68741497+TheDevarshiShah@users.noreply.github.com' -f '/home/stark/.ssh/github_key'"
+    brownecho "cat /home/stark/.ssh/github_key.pub"
     echo ""
-    echo ">>> A. Git (Ubuntu Only)"
-    echo "---> apt install git"
-    user_sub_flag=$(get_flag_input)
-    if [[ "$user_sub_flag" == 'Y' ]]; then
-        apt install git
-    fi
+    brownecho "# Add this to the portal: https://github.com/settings/keys"
+    brownecho "# Start clonning!: https://github.com/TheDevarshiShah?tab=repositories"
+    echo "-----------------------------------------------------------------------------------------------------------------"
     enter_to_proceed
 
-    echo ">>> B. Git SSH Key (manual)"
-    redecho "-----------------------------------------------------------------------------------------------------------------"
-    redecho "cd ~"
-    redecho "mkdir -p Code"
-    redecho "git config --global user.name 'Devarshi K. Shah'"
-    redecho "git config --global user.email '68741497+TheDevarshiShah@users.noreply.github.com'"
-    redecho "ssh-keygen -t rsa -b 4096 -C '68741497+TheDevarshiShah@users.noreply.github.com' -f '/home/stark/.ssh/github_key'"
-    redecho "cat /home/stark/.ssh/github_key.pub # Add this to the portal: https://github.com/settings/keys"
-    redecho "-----------------------------------------------------------------------------------------------------------------"
-    enter_to_proceed    
-    echo ">>> C. Conda (manual): https://docs.anaconda.com/miniconda/install/"
-    redecho "-----------------------------------------------------------------------------"
-    redecho "cd ~"
-    redecho "curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
-    redecho "bash ~/Miniconda3-latest-Linux-x86_64.sh"
-    redecho "-----------------------------------------------------------------------------"
+    echo ">>> 2. Conda"
+    if [[ "$OS_TYPE" == "UBUNTU" ]]; then
+        redecho "Curl is required; install it first?"
+        redecho "---> apt install curl"
+        user_flag=$(get_flag_input)
+        if [[ "$user_flag" == 'Y' ]]; then
+            apt install curl
+        fi  
+    fi
+    echo "DO:-----------------------------------------------------------------------------"
+    brownecho "cd ~"
+    brownecho "curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+    brownecho "bash ~/Miniconda3-latest-Linux-x86_64.sh"
+    echo "-----------------------------------------------------------------------------"
     enter_to_proceed
 
-    echo ">>> D. Docker (manual): https://docs.docker.com/engine/install/fedora/"
-    echo ">>> Is it Fedora(Y) or Ubuntu(N)?"
-    user_sub_flag=$(get_flag_input)
-    if [[ "$user_sub_flag" == 'Y' ]]; then
-        redecho "-------------------------------------------------------------------------------------------------"
-        redecho "# Remove existing and installing fresh"
-        redecho "sudo dnf remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux docker-engine"
-        redecho "sudo dnf -y install dnf-plugins-core"
-        redecho "sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo"
-        redecho "sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin"
-        redecho "sudo systemctl enable --now docker"
+	
+    if [[ "$OS_TYPE" == "FEDORA" ]]; then
+        echo ">>> 3. Docker: https://docs.docker.com/engine/install/fedora/"
+        echo "DO:----------------------------------------------------------------------------------------------"
+        brownecho "# Remove existing and installing fresh"
+        brownecho "sudo dnf remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux docker-engine"
+        brownecho "sudo dnf -y install dnf-plugins-core"
+        brownecho "sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo"
+        brownecho "sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin"
+        brownecho "sudo systemctl enable --now docker"
+        brownecho "sudo docker run hello-world"
         echo ""
-        redecho "# Run docker without sudo"
-        redecho "sudo docker run hello-world"
-        redecho "sudo groupadd docker"
-        redecho "sudo usermod -aG docker $USER"
-        redecho "newgrp docker"
-        redecho "docker run hello-world"
-        redecho "-------------------------------------------------------------------------------------------------"
-    elif [[ "$user_sub_flag" == 'N' ]]; then
-        redecho "----------------------------------------------------------------------------------------------------------------"
-        redecho "# Remove existing and installing fresh"
-        redecho "for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done"
-        redecho "sudo apt-get update"
-        redecho "sudo apt-get install ca-certificates curl"
-        redecho "sudo install -m 0755 -d /etc/apt/keyrings"
-        redecho "sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc"
-        redecho "sudo chmod a+r /etc/apt/keyrings/docker.asc"
+        brownecho "# Run docker without sudo"
+        brownecho "sudo groupadd docker"
+        brownecho "sudo usermod -aG docker \$USER"
+        brownecho "newgrp docker"
+        brownecho "docker run hello-world"
+        echo "-------------------------------------------------------------------------------------------------"
+
+
+    elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
+        echo ">>> 3. Docker: https://docs.docker.com/engine/install/ubuntu/"
+        echo "DO:-------------------------------------------------------------------------------------------------------------"
+        brownecho "# Remove existing and installing fresh"
+        brownecho "for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done"
+        brownecho "sudo apt-get update"
+        brownecho "sudo apt-get install ca-certificates curl"
+        brownecho "sudo install -m 0755 -d /etc/apt/keyrings"
+        brownecho "sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc"
+        brownecho "sudo chmod a+r /etc/apt/keyrings/docker.asc"
         echo ""
-        redecho "# Add the repository to Apt sources: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository"
-        redecho "sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin"
-        redecho "sudo docker run hello-world"
-        redecho "sudo groupadd docker"
-        redecho "sudo usermod -aG docker $USER"
-        redecho "newgrp docker"
-        redecho "docker run hello-world"
-        redecho "----------------------------------------------------------------------------------------------------------------"
+        brownecho "# Add the repository to Apt sources: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository"
+        enter_to_proceed
+        brownecho "sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin"
+        brownecho "sudo docker run hello-world"
+        echo ""
+        brownecho "# Run docker without sudo"
+        brownecho "sudo groupadd docker"
+        brownecho "sudo usermod -aG docker \$USER"
+        brownecho "newgrp docker"
+        brownecho "docker run hello-world"
+        echo "----------------------------------------------------------------------------------------------------------------"
     fi
-    enter_to_proceed
+
 
     print_underscores
     echo "Done!"
 }
 battery() {
     clear
-    echo ">> Battery Life optimizations"
-    echo ">>> 1. Disable Bluetooth to be turned on startup (manual):"
-    redecho "------------------------------------------------------------------" 
-    redecho "sudo cp /etc/bluetooth/main.conf /etc/bluetooth/main-original.conf"
-    redecho "#Change to 'AutoEnable=false' flag in /etc/bluetooth/main.conf"
-    redecho "------------------------------------------------------------------"
+    echo ">> Battery Life optimizations:"
+    
+    echo ">>> 1. Disable Bluetooth to be turned on startup"
+    echo "DO:---------------------------------------------------------------" 
+    brownecho "sudo cp /etc/bluetooth/main.conf /etc/bluetooth/main-original.conf"
+    brownecho "#Change to 'AutoEnable=false' flag in /etc/bluetooth/main.conf"
+    echo "------------------------------------------------------------------"
     enter_to_proceed
 
-    echo ">>> 2. Auto-CPUFrequency:"
+    echo ">>> 2. Auto-CPUFrequency"
+    if ! git --version &> /dev/null; then
+        redecho "Git is required; exit and setup Dev env. first?"
+        user_flag=$(get_flag_input)
+        if [[ "$user_flag" == 'Y' ]]; then
+            exit
+        fi    
+    fi
     echo ">>> Confirm and run these commands: https://github.com/AdnanHodzic/auto-cpufreq"
-    echo ">>>> 2.1. Install with following commands (manual):"
-    redecho "---------------------------------------------------------"
-    redecho "cd ~"
-    redecho "mkdir -p Apps"
-    redecho "cd ~/Apps"
-    redecho "git clone https://github.com/AdnanHodzic/auto-cpufreq.git"
-    redecho "cd auto-cpufreq && sudo ./auto-cpufreq-installer"
-    redecho "---------------------------------------------------------"
+    echo ">>>> 2.1. Install"
+    echo "DO:------------------------------------------------------"
+    brownecho "cd ~"
+    brownecho "mkdir -p Apps"
+    brownecho "cd ~/Apps"
+    brownecho "git clone https://github.com/AdnanHodzic/auto-cpufreq.git"
+    brownecho "cd auto-cpufreq && sudo ./auto-cpufreq-installer"
+    echo "---------------------------------------------------------"
     enter_to_proceed
 
-    echo ">>>> 2.2. Install the daemon using GUI (manual): https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#install---auto-cpufreq-daemon"
-    redecho "#Open auto-cpufreq app and install the deamon"
+    echo ">>>> 2.2. Install the daemon using GUI: https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#install---auto-cpufreq-daemon"
+    brownecho "# Open auto-cpufreq app and install the deamon"
     enter_to_proceed
 
-    echo ">>>> 2.3. Battery charging thresholds in this conf file (manual): https://github.com/AdnanHodzic/auto-cpufreq/#example-config-file-contents"
-    redecho "---------------------------------" 
-    redecho "sudo touch /etc/auto-cpufreq.conf"
-    redecho "#uncomment stop_threshold = 80"
-    redecho "---------------------------------" 
-    enter_to_proceed
 
     print_underscores
     echo "Done!"
@@ -283,40 +394,39 @@ battery() {
 
 ##### start #####
 clear
-echo "Welcome to Linutzen v1.0"
+echo "Welcome to Linutzen v1.0 for $OS_TYPE"
 print_menu
-#echo "0. Initial things BEFORE updates (Fedora only)"
-#echo "1. Check Updates"
-#echo "2. Setup Flathub (Ubuntu only)"
-#echo "3. Install Flatpak apps"
-#echo "4. Setup Devtools"
-#echo "5. Battery Life optimizations"
-#echo "9. Exit"
+
+#    print_stars
+#    echo "Select an option:"
+#    echo "0. Initial Things"
+#    echo "1. Check Updates"
+#    echo "2. Install Apps"
+#    echo "3. Setup Dev Environment"
+#    echo "4. Battery Optimizations"
+#    echo "9. Exit"
 
 while true; do	
     user_integer=$(get_integer_input)
     if [[ "$user_integer" == 0 ]]; then
-        initial
+        initial "$OS_TYPE"
         print_menu
     elif [[ "$user_integer" == 1 ]]; then
-        updates
+        updates "$OS_TYPE"
         print_menu
     elif [[ "$user_integer" == 2 ]]; then
-        setup_flathub
+        apps "$OS_TYPE"
         print_menu
     elif [[ "$user_integer" == 3 ]]; then
-        flatpak_apps
+        dev_tools "$OS_TYPE"
         print_menu
     elif [[ "$user_integer" == 4 ]]; then
-        dev_tools
-        print_menu
-    elif [[ "$user_integer" == 5 ]]; then
-        battery
+        battery "$OS_TYPE"
         print_menu
     elif [[ "$user_integer" == 9 ]]; then
-        print_stars
-        echo "Tschüs!"
         print_underscores
+        echo "Tschüs!"
+        print_stars
         echo ""
         exit
 	fi
