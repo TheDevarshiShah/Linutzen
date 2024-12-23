@@ -225,8 +225,10 @@ apps() {
         redecho "-->             codium --classic"
         redecho "-->             thunderbird"
         redecho "-->             libreoffice"
+        redecho "-->             dialect"
         redecho "-->             freetube"
         redecho "-->             vlc"
+        redecho "-->             gnome-maps"
         #redecho "-->flatpak install flathub org.gnome.meld -y # no snap"
         #redecho "-->flatpak install flathub us.zoom.Zoom -y # no snap"
         #redecho "-->flatpak install flathub com.usebottles.bottles -y # no snap"
@@ -238,8 +240,11 @@ apps() {
             snap install codium --classic
             snap install thunderbird
             snap install libreoffice
+            snap install dialect
             snap install freetube
             snap install vlc
+            apt insatll gnome-maps
+            
             #flatpak install flathub org.gnome.meld -y # no snap
             #flatpak install flathub us.zoom.Zoom -y # no snap
             #flatpak install flathub com.usebottles.bottles -y # no snap
