@@ -191,7 +191,7 @@ apps() {
 
 
     if [[ "$OS_TYPE" == "FEDORA" ]]; then
-        redecho "--> flatpak install flathub com.brave.Browser -y"
+        redecho "--> flatpak install flathub com.brave.Browser"
         redecho "-->                         firefox"
         redecho "-->                         vscodium"
         redecho "-->                         meld"
@@ -205,18 +205,18 @@ apps() {
         redecho "-->                         Flatseal"
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            flatpak install flathub com.brave.Browser -y
-            flatpak install flathub org.mozilla.firefox -y
-            flatpak install flathub com.vscodium.codium -y
-            flatpak install flathub org.gnome.meld -y
-            flatpak install flathub org.mozilla.Thunderbird -y
-            flatpak install flathub org.libreoffice.LibreOffice -y
-            flatpak install flathub us.zoom.Zoom -y
-            flatpak install flathub io.freetubeapp.FreeTube -y
-            flatpak install flathub org.videolan.VLC -y
-            flatpak install flathub com.usebottles.bottles -y
-            flatpak install flathub com.mattjakeman.ExtensionManager -y
-            flatpak install flathub com.github.tchx84.Flatseal -y
+            flatpak install flathub com.brave.Browser
+            flatpak install flathub org.mozilla.firefox
+            flatpak install flathub com.vscodium.codium
+            flatpak install flathub org.gnome.meld
+            flatpak install flathub org.mozilla.Thunderbird
+            flatpak install flathub org.libreoffice.LibreOffice
+            flatpak install flathub us.zoom.Zoom
+            flatpak install flathub io.freetubeapp.FreeTube
+            flatpak install flathub org.videolan.VLC
+            flatpak install flathub com.usebottles.bottles
+            flatpak install flathub com.mattjakeman.ExtensionManager
+            flatpak install flathub com.github.tchx84.Flatseal
         fi
 
 
@@ -228,11 +228,11 @@ apps() {
         redecho "-->             dialect"
         redecho "-->             freetube"
         redecho "-->             vlc"
-        redecho "-->             gnome-maps"
-        #redecho "-->flatpak install flathub org.gnome.meld -y # no snap"
-        #redecho "-->flatpak install flathub us.zoom.Zoom -y # no snap"
-        #redecho "-->flatpak install flathub com.usebottles.bottles -y # no snap"
-        #redecho "-->flatpak install flathub com.mattjakeman.ExtensionManager -y # no snap"
+        redecho "--> apt insatll gnome-maps"
+        #redecho "-->flatpak install flathub org.gnome.meld # no snap"
+        #redecho "-->flatpak install flathub us.zoom.Zoom # no snap"
+        #redecho "-->flatpak install flathub com.usebottles.bottles # no snap"
+        #redecho "-->flatpak install flathub com.mattjakeman.ExtensionManager # no snap"
 
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
@@ -245,10 +245,10 @@ apps() {
             snap install vlc
             apt insatll gnome-maps
             
-            #flatpak install flathub org.gnome.meld -y # no snap
-            #flatpak install flathub us.zoom.Zoom -y # no snap
-            #flatpak install flathub com.usebottles.bottles -y # no snap
-            #flatpak install flathub com.mattjakeman.ExtensionManager -y # no snap
+            #flatpak install flathub org.gnome.meld # no snap
+            #flatpak install flathub us.zoom.Zoom # no snap
+            #flatpak install flathub com.usebottles.bottles # no snap
+            #flatpak install flathub com.mattjakeman.ExtensionManager # no snap
 
         fi
     fi
