@@ -148,10 +148,8 @@ initial() {
         enter_to_proceed
         echo ">>> 2. Install Gnome Tweaks"
         redecho "---> apt install gnome-tweaks"
-        redecho "---> apt install gnome-tweaks" 
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            apt install gnome-tweaks
             apt install gnome-tweaks
         fi
     fi
@@ -188,11 +186,17 @@ updates() {
 apps() {
     clear
     echo ">> Installing Apps:"
+    redecho "# Confirm the command: https://brave.com/linux/"
+    redecho "--> curl -fsS https://dl.brave.com/install.sh | sh"
+    user_flag=$(get_flag_input)
+    if [[ "$user_flag" == 'Y' ]]; then
+        curl -fsS https://dl.brave.com/install.sh | sh
+    fi
+    enter_to_proceed
 
 
     if [[ "$OS_TYPE" == "FEDORA" ]]; then
-        redecho "--> flatpak install flathub com.brave.Browser"
-        redecho "-->                         firefox"
+        redecho "--> flatpak install flathub firefox"
         redecho "-->                         vscodium"
         redecho "-->                         meld"
         redecho "-->                         Thunderbird"
@@ -205,7 +209,6 @@ apps() {
         redecho "-->                         Flatseal"
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            flatpak install flathub com.brave.Browser
             flatpak install flathub org.mozilla.firefox
             flatpak install flathub com.vscodium.codium
             flatpak install flathub org.gnome.meld
@@ -221,22 +224,23 @@ apps() {
 
 
     elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
-        redecho "-->snap install brave"
-        redecho "-->             codium --classic"
+        redecho "--> snap install codium --classic"
         redecho "-->             thunderbird"
+        redecho "-->             telegram-desktop"
         redecho "-->             libreoffice"
         redecho "-->             dialect"
         redecho "-->             freetube"
         redecho "-->             vlc"
-        redecho "--> apt insatll gnome-maps"
+        redecho "--> apt insatll torbrowser-launcher  #deb"
+        redecho "--> apt insatll gnome-maps  #deb"
+        redecho "--> apt insatll syncthing  #deb"
+        redecho "--> flatpak install flathub com.usebottles.bottles"
         #redecho "-->flatpak install flathub org.gnome.meld # no snap"
         #redecho "-->flatpak install flathub us.zoom.Zoom # no snap"
-        #redecho "-->flatpak install flathub com.usebottles.bottles # no snap"
         #redecho "-->flatpak install flathub com.mattjakeman.ExtensionManager # no snap"
 
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            snap install brave
             snap install codium --classic
             snap install thunderbird
             snap install libreoffice
@@ -244,10 +248,12 @@ apps() {
             snap install freetube
             snap install vlc
             apt insatll gnome-maps
+            apt insatll syncthing
+            flatpak install flathub com.usebottles.bottles
+            echo ">>> Get Samsung Magician: https://semiconductor.samsung.com/emea/consumer-storage/support/tools/"
             
             #flatpak install flathub org.gnome.meld # no snap
             #flatpak install flathub us.zoom.Zoom # no snap
-            #flatpak install flathub com.usebottles.bottles # no snap
             #flatpak install flathub com.mattjakeman.ExtensionManager # no snap
 
         fi
@@ -358,14 +364,14 @@ battery() {
     clear
     echo ">> Battery Life optimizations:"
     
-    echo ">>> 1. Disable Bluetooth to be turned on startup"
-    echo "DO:---------------------------------------------------------------" 
-    brownecho "sudo cp /etc/bluetooth/main.conf /etc/bluetooth/main-original.conf"
-    brownecho "#Change to 'AutoEnable=false' flag in /etc/bluetooth/main.conf"
-    echo "------------------------------------------------------------------"
-    enter_to_proceed
+    #echo ">>> 1. Disable Bluetooth to be turned on startup"
+    #echo "DO:---------------------------------------------------------------" 
+    #brownecho "sudo cp /etc/bluetooth/main.conf /etc/bluetooth/main-original.conf"
+    #brownecho "# Change to 'AutoEnable=false' flag in /etc/bluetooth/main.conf"
+    #echo "------------------------------------------------------------------"
+    #enter_to_proceed
 
-    echo ">>> 2. Auto-CPUFrequency"
+    echo ">>> 1. Auto-CPUFrequency"
     if ! git --version &> /dev/null; then
         redecho "Git is required; exit and setup Dev env. first?"
         user_flag=$(get_flag_input)

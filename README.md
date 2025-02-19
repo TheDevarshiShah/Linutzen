@@ -2,7 +2,7 @@
 
 ## Start
 
-- Display a welcome message:  
+- Display a welcome message:
   `"Welcome to Linutzen v1.0 for <OS_TYPE>"`.
 - Display the main menu.
 
@@ -48,9 +48,11 @@ Add the following lines to `/etc/dnf/dnf.conf`:
 ### `apps`
 - This function installs predefined applications based on the OS type.
 
+**Application to Install with official way:**
+  - Brave Browser
+
 #### Fedora:
 - **Applications to Install with `flatpak install flathub <app-id>` :**
-   - Brave Browser
    - Firefox
    - VSCodium
    - Meld
@@ -64,15 +66,19 @@ Add the following lines to `/etc/dnf/dnf.conf`:
    - Flatseal
 
 #### Ubuntu:
-- **Applications to Install with `snap install <app-name>` :**
-   - Brave Browser
+- **Applications to Install with `snap install <app-name>`:**
    - Codium (Classic)
    - Thunderbird
    - LibreOffice
    - Dialect
    - FreeTube
    - VLC
-   - GNOME Maps (deb)
+- **Applications to Install with `apt install <app-name>`:**
+   - Tor Browser
+   - GNOME Maps
+   - Syncthing
+- **Applications to Install with `flatpak install <app-name>`:**
+   - Bottles
 
 ---
 
@@ -86,6 +92,31 @@ Add the following lines to `/etc/dnf/dnf.conf`:
 ---
 
 ### `battery`
-- Optimize battery life by:
-  - Switch the flag `AutoEnable` to `false` in `/etc/bluetooth/main.conf`
 - Install [Auto-CPUFrequency](https://github.com/AdnanHodzic/auto-cpufreq.git).
+
+---
+
+## Extra:
+```
+sudo cp /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf /etc/NetworkManager/conf.d/default-wifi-powersave-on-original.conf
+
+# change the value wifi.powersave = 3 to 2
+
+sudo systemctl restart NetworkManager
+```
+
+```
+sudo cp /etc/UPower/UPower.conf /etc/UPower/UPower-original.conf
+
+# modify to 
+IgnoreLid=true
+```
+
+```
+sudo cp /etc/systemd/logind.conf /etc/systemd/logind-original.conf
+
+# modify to 
+HandleLidSwitch=ignore
+HandleLidSwitchExternalPower=ignore
+HandleLidSwitchDocked=ignore
+```
