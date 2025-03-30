@@ -226,11 +226,13 @@ apps() {
     elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
         redecho "--> snap install codium --classic"
         redecho "-->             thunderbird"
+	    redecho "-->             signal-desktop"
         redecho "-->             telegram-desktop"
         redecho "-->             libreoffice"
         redecho "-->             dialect"
         redecho "-->             freetube"
         redecho "-->             vlc"
+        redecho "-->             surfshark"
         redecho "--> apt insatll torbrowser-launcher  #deb"
         redecho "--> apt insatll gnome-maps  #deb"
         redecho "--> apt insatll syncthing  #deb"
@@ -247,6 +249,7 @@ apps() {
             snap install dialect
             snap install freetube
             snap install vlc
+            snap install surfshark
             apt insatll gnome-maps
             apt insatll syncthing
             flatpak install flathub com.usebottles.bottles

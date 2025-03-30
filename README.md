@@ -69,10 +69,13 @@ Add the following lines to `/etc/dnf/dnf.conf`:
 - **Applications to Install with `snap install <app-name>`:**
    - Codium (Classic)
    - Thunderbird
+   - Signal
+   - Telegram
    - LibreOffice
    - Dialect
    - FreeTube
    - VLC
+   - Surfshark
 - **Applications to Install with `apt install <app-name>`:**
    - Tor Browser
    - GNOME Maps
