@@ -32,6 +32,7 @@ Add the following lines to `/etc/dnf/dnf.conf`:
 #### Ubuntu:
 1. **Setting up Flathub**
 2. **Install Gnome Tweaks (deb)**
+3. **Resize & Rotate options on Right-click menu in Nautilus**
 
 ---
 

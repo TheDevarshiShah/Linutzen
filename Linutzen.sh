@@ -152,6 +152,14 @@ initial() {
         if [[ "$user_flag" == 'Y' ]]; then
             apt install gnome-tweaks
         fi
+
+        enter_to_proceed
+        echo ">>> 3. Resize & Rotate options on Right-click menu in Nautilus"
+        redecho "---> apt install nautilus-image-converter"
+        user_flag=$(get_flag_input)
+        if [[ "$user_flag" == 'Y' ]]; then
+            apt apt install nautilus-image-converter
+        fi
     fi
 	
 
