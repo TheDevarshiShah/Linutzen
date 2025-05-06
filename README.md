@@ -72,6 +72,7 @@ Add the following lines to `/etc/dnf/dnf.conf`:
    - Thunderbird
    - Signal
    - Telegram
+   - Mattermost
    - LibreOffice
    - Dialect
    - FreeTube

@@ -37,11 +37,15 @@ for arg in "$@"; do
         --update)  
             OS_TYPE="UPDATES"
             ### HARD CODED TO UBUNTU FOR NOW
-            redecho "---> apt update && apt upgrade"
+            redecho "---> apt update && apt upgrade && apt autoremove"
+            redecho "---> snap refresh"
             redecho "---> flatpak update"
             print_underscores
             echo ""
-            apt update && apt upgrade
+            apt update && apt upgrade && apt autoremove 
+            print_underscores
+            print_underscores
+            snap refresh
             print_underscores
             flatpak update
             print_stars
@@ -236,6 +240,7 @@ apps() {
         redecho "-->             thunderbird"
 	    redecho "-->             signal-desktop"
         redecho "-->             telegram-desktop"
+        redecho "-->             mattermost-desktop"
         redecho "-->             libreoffice"
         redecho "-->             dialect"
         redecho "-->             freetube"
