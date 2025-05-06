@@ -135,6 +135,14 @@ initial() {
             dnf install gnome-tweaks
         fi
 
+        enter_to_proceed
+        echo ">>> 3. Add Flathub Repo"
+        redecho "---> flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"    
+        user_flag=$(get_flag_input)
+        if [[ "$user_flag" == 'Y' ]]; then
+            flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        fi
+
 
     elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
         echo ">>> 1. Setting up Flathub"
@@ -208,44 +216,56 @@ apps() {
 
 
     if [[ "$OS_TYPE" == "FEDORA" ]]; then
-        redecho "--> flatpak install flathub firefox"
-        redecho "-->                         vscodium"
-        redecho "-->                         meld"
+        #redecho "--> flatpak install flathub firefox"
+        redecho "--> flatpak install flathub vscodium"
+        #redecho "-->                         meld"
         redecho "-->                         Thunderbird"
+        redecho "-->                         Mattermost  # https://docs.mattermost.com/deploy/desktop/linux-desktop-install.html"
+        redecho "-->                         Signal"
         redecho "-->                         LibreOffice"
-        redecho "-->                         Zoom"
-        redecho "-->                         FreeTube"
+        redecho "-->                         Dialect"
+        #redecho "-->                         Zoom"
+        #redecho "-->                         FreeTube"
         redecho "-->                         VLC"
         redecho "-->                         bottles"
+        redecho "-->                         Maps"
+        redecho "-->                         torbrowser"
         redecho "-->                         ExtensionManager"
-        redecho "-->                         Flatseal"
+        #redecho "-->                         Flatseal"
+        redecho "--> dnf insatll syncthing  #rpm"
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            flatpak install flathub org.mozilla.firefox
+            #flatpak install flathub org.mozilla.firefox
             flatpak install flathub com.vscodium.codium
-            flatpak install flathub org.gnome.meld
+            #flatpak install flathub org.gnome.meld
             flatpak install flathub org.mozilla.Thunderbird
+            flatpak install flathub com.mattermost.Desktop
+            flatpak install flathub org.signal.Signal
             flatpak install flathub org.libreoffice.LibreOffice
-            flatpak install flathub us.zoom.Zoom
-            flatpak install flathub io.freetubeapp.FreeTube
+            flatpak install flathub app.drey.Dialect
+            #flatpak install flathub us.zoom.Zoom
+            #flatpak install flathub io.freetubeapp.FreeTube
             flatpak install flathub org.videolan.VLC
             flatpak install flathub com.usebottles.bottles
+            flatpak install flathub org.gnome.Maps
+            flatpak install flathub org.torproject.torbrowser-launcher
             flatpak install flathub com.mattjakeman.ExtensionManager
-            flatpak install flathub com.github.tchx84.Flatseal
+            #flatpak install flathub com.github.tchx84.Flatseal
+            dnf insatll syncthing
         fi
 
 
     elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
         redecho "--> snap install codium --classic"
         redecho "-->             thunderbird"
-	    redecho "-->             signal-desktop"
-        redecho "-->             telegram-desktop"
         redecho "-->             mattermost-desktop"
+	    redecho "-->             signal-desktop"
+        #redecho "-->             telegram-desktop"
         redecho "-->             libreoffice"
         redecho "-->             dialect"
-        redecho "-->             freetube"
+        #redecho "-->             freetube"
         redecho "-->             vlc"
-        redecho "-->             surfshark"
+        #redecho "-->             surfshark"
         redecho "--> apt insatll torbrowser-launcher  #deb"
         redecho "--> apt insatll gnome-maps  #deb"
         redecho "--> apt insatll syncthing  #deb"
@@ -258,11 +278,14 @@ apps() {
         if [[ "$user_flag" == 'Y' ]]; then
             snap install codium --classic
             snap install thunderbird
+            snap install mattermost-desktop
+            snap install signal-desktop
+            #snap install telegram-desktop
             snap install libreoffice
             snap install dialect
-            snap install freetube
+            #snap install freetube
             snap install vlc
-            snap install surfshark
+            #snap install surfshark
             apt insatll gnome-maps
             apt insatll syncthing
             flatpak install flathub com.usebottles.bottles
@@ -302,15 +325,40 @@ dev_tools() {
     echo "----------------------------------------------------------------------------------"
     enter_to_proceed
 
-    echo ">>> 1. SSH Key-gen for Git"
+    echo ">>> 1.1 SSH Key-gen for GitHub"
     echo "DO:--------------------------------------------------------------------------------------------------------------"
     brownecho "ssh-keygen -t rsa -b 4096 -C '68741497+TheDevarshiShah@users.noreply.github.com' -f '/home/stark/.ssh/github_key'"
     brownecho "cat /home/stark/.ssh/github_key.pub"
     echo ""
     brownecho "# Add this to the portal: https://github.com/settings/keys"
-    brownecho "# Start clonning!: https://github.com/TheDevarshiShah?tab=repositories"
     echo "-----------------------------------------------------------------------------------------------------------------"
+    redecho "# Check Clonning"
+    redecho "---> cd ~/Code && mkdir -p Linutzen && cd Linutzen/"
+    redecho "---> git clone git@github.com:TheDevarshiShah/Linutzen.git"
+    user_flag=$(get_flag_input)
+    if [[ "$user_flag" == 'Y' ]]; then
+        cd ~/Code && mkdir -p Linutzen && cd Linutzen/
+        git clone git@github.com:TheDevarshiShah/Linutzen.git
+    fi
     enter_to_proceed
+
+    echo ">>> 1.2 SSH Key-gen for GitLab"
+    echo "DO:--------------------------------------------------------------------------------------------------------------"
+    brownecho "ssh-keygen -t rsa -b 4096 -C 'devarshi.shah@tuhh.de' -f '/home/stark/.ssh/gitlab_key'"
+    brownecho "cat /home/stark/.ssh/gitlab_key.pub"
+    echo ""
+    brownecho "# Add this to the portal: https://collaborating.tuhh.de/-/user_settings/ssh_keys"
+    echo "-----------------------------------------------------------------------------------------------------------------"
+    redecho "# Check Clonning"
+    redecho "---> cd ~/Code && mkdir -p BigData2024 && cd BigData2024/"
+    redecho "---> git clone git@collaborating.tuhh.de:cfz2371/bigdata2024.git"
+    user_flag=$(get_flag_input)
+    if [[ "$user_flag" == 'Y' ]]; then
+        cd ~/Code && mkdir -p BigData2024 && cd BigData2024/
+        git clone git@collaborating.tuhh.de:cfz2371/bigdata2024.git
+    fi
+    enter_to_proceed
+
 
     echo ">>> 2. Conda"
     if [[ "$OS_TYPE" == "UBUNTU" ]]; then

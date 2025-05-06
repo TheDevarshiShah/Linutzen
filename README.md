@@ -29,6 +29,8 @@ Add the following lines to `/etc/dnf/dnf.conf`:
 
 2. **Install Gnome Tweaks (rpm)**
 
+3. **Add Flathub Repo (--if-not-exists)**
+
 #### Ubuntu:
 1. **Setting up Flathub**
 2. **Install Gnome Tweaks (deb)**
@@ -54,33 +56,32 @@ Add the following lines to `/etc/dnf/dnf.conf`:
 
 #### Fedora:
 - **Applications to Install with `flatpak install flathub <app-id>` :**
-   - Firefox
-   - VSCodium
-   - Meld
+   - Codium
    - Thunderbird
-   - LibreOffice
-   - Zoom
-   - FreeTube
+   - Mattermost (Unofficial)
+   - Signal
+   - LibreOffice [CHECK IF PREINSTALLED]
+   - Dialect
    - VLC
    - Bottles
+   - Gnome Maps
+   - Tor Browser
    - ExtensionManager
-   - Flatseal
+- **Applications to Install with `dnf install <app-name>`:**
+   - Syncthing ([Enable](https://src.fedoraproject.org/rpms/syncthing))
 
 #### Ubuntu:
 - **Applications to Install with `snap install <app-name>`:**
    - Codium (Classic)
    - Thunderbird
-   - Signal
-   - Telegram
    - Mattermost
+   - Signal
    - LibreOffice
    - Dialect
-   - FreeTube
    - VLC
-   - Surfshark
 - **Applications to Install with `apt install <app-name>`:**
+   - Gnome Maps
    - Tor Browser
-   - GNOME Maps
    - Syncthing
 - **Applications to Install with `flatpak install <app-name>`:**
    - Bottles
@@ -89,8 +90,7 @@ Add the following lines to `/etc/dnf/dnf.conf`:
 
 ### `dev_tools`
 - Set up development tools based on the OS type:
-  - Git
-  - SSH
+  - Git & SSH Keys
   - Conda
   - Docker
 
