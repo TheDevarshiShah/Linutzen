@@ -220,7 +220,7 @@ apps() {
         redecho "--> flatpak install flathub vscodium"
         #redecho "-->                         meld"
         redecho "-->                         Thunderbird"
-        redecho "-->                         Mattermost  # https://docs.mattermost.com/deploy/desktop/linux-desktop-install.html"
+        #redecho "-->                         Mattermost  # https://docs.mattermost.com/deploy/desktop/linux-desktop-install.html"
         redecho "-->                         Signal"
         redecho "-->                         LibreOffice"
         redecho "-->                         Dialect"
@@ -239,7 +239,7 @@ apps() {
             flatpak install flathub com.vscodium.codium
             #flatpak install flathub org.gnome.meld
             flatpak install flathub org.mozilla.Thunderbird
-            flatpak install flathub com.mattermost.Desktop
+            #flatpak install flathub com.mattermost.Desktop
             flatpak install flathub org.signal.Signal
             flatpak install flathub org.libreoffice.LibreOffice
             flatpak install flathub app.drey.Dialect
@@ -258,7 +258,7 @@ apps() {
     elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
         redecho "--> snap install codium --classic"
         redecho "-->             thunderbird"
-        redecho "-->             mattermost-desktop"
+        #redecho "-->             mattermost-desktop"
 	    redecho "-->             signal-desktop"
         #redecho "-->             telegram-desktop"
         redecho "-->             libreoffice"
@@ -278,7 +278,7 @@ apps() {
         if [[ "$user_flag" == 'Y' ]]; then
             snap install codium --classic
             snap install thunderbird
-            snap install mattermost-desktop
+            #snap install mattermost-desktop
             snap install signal-desktop
             #snap install telegram-desktop
             snap install libreoffice

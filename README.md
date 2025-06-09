@@ -58,7 +58,6 @@ Add the following lines to `/etc/dnf/dnf.conf`:
 - **Applications to Install with `flatpak install flathub <app-id>` :**
    - Codium
    - Thunderbird
-   - Mattermost (Unofficial)
    - Signal
    - LibreOffice [CHECK IF PREINSTALLED]
    - Dialect
@@ -74,7 +73,6 @@ Add the following lines to `/etc/dnf/dnf.conf`:
 - **Applications to Install with `snap install <app-name>`:**
    - Codium (Classic)
    - Thunderbird
-   - Mattermost
    - Signal
    - LibreOffice
    - Dialect
