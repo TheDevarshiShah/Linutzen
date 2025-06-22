@@ -128,11 +128,11 @@ initial() {
         redecho "A reboot must be done before next step!"
         
         enter_to_proceed
-        echo ">>> 2. Install Gnome Tweaks"
-        redecho "---> dnf install gnome-tweaks"    
+        echo ">>> 2. Install Gnome Extensions"
+        redecho "---> flatpak install com.mattjakeman.ExtensionManager -y"    
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            dnf install gnome-tweaks
+            flatpak install com.mattjakeman.ExtensionManager -y
         fi
 
         enter_to_proceed
@@ -159,18 +159,18 @@ initial() {
 
         enter_to_proceed
         echo ">>> 2. Install Gnome Tweaks"
-        redecho "---> apt install gnome-tweaks"
+        redecho "---> apt install gnome-tweaks -y"
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            apt install gnome-tweaks
+            apt install gnome-tweaks -y
         fi
 
         enter_to_proceed
         echo ">>> 3. Resize & Rotate options on Right-click menu in Nautilus"
-        redecho "---> apt install nautilus-image-converter"
+        redecho "---> apt install nautilus-image-converter -y"
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            apt apt install nautilus-image-converter
+            apt apt install nautilus-image-converter -y
         fi
     fi
 	
@@ -184,18 +184,18 @@ updates() {
 
 
     if [[ "$OS_TYPE" == "FEDORA" ]]; then
-        redecho "---> dnf update"
-        redecho "---> flatpak update"
-        dnf update
-        flatpak update
+        redecho "---> dnf update -y"
+        redecho "---> flatpak update -y"
+        dnf update -y
+        flatpak update -y
         redecho "A reboot must be done if updates are applied!" 
 
     
     elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
-        redecho "---> apt update && apt upgrade"
+        redecho "---> apt update -y && apt upgrade -y"
         redecho "---> flatpak update -y"
-        apt update && apt upgrade
-        flatpak update
+        apt update -y && apt upgrade -y
+        flatpak update -y
         redecho "A reboot must be done if updates are applied!" 
     fi
 	
@@ -217,46 +217,46 @@ apps() {
 
     if [[ "$OS_TYPE" == "FEDORA" ]]; then
         #redecho "--> flatpak install flathub firefox"
-        redecho "--> flatpak install flathub vscodium"
+        redecho "--> flatpak install flathub vscodium -y"
         #redecho "-->                         meld"
         redecho "-->                         Thunderbird"
         #redecho "-->                         Mattermost  # https://docs.mattermost.com/deploy/desktop/linux-desktop-install.html"
         redecho "-->                         Signal"
-        redecho "-->                         LibreOffice"
+        #redecho "-->                         LibreOffice"
         redecho "-->                         Dialect"
         #redecho "-->                         Zoom"
         #redecho "-->                         FreeTube"
         redecho "-->                         VLC"
         redecho "-->                         bottles"
-        redecho "-->                         Maps"
+        #redecho "-->                         Maps"
         redecho "-->                         torbrowser"
-        redecho "-->                         ExtensionManager"
+        #redecho "-->                         ExtensionManager"
         #redecho "-->                         Flatseal"
-        redecho "--> dnf insatll syncthing  #rpm"
+        redecho "--> dnf install syncthing  #rpm"
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
             #flatpak install flathub org.mozilla.firefox
-            flatpak install flathub com.vscodium.codium
+            flatpak install flathub com.vscodium.codium -y
             #flatpak install flathub org.gnome.meld
-            flatpak install flathub org.mozilla.Thunderbird
+            flatpak install flathub org.mozilla.Thunderbird -y
             #flatpak install flathub com.mattermost.Desktop
-            flatpak install flathub org.signal.Signal
-            flatpak install flathub org.libreoffice.LibreOffice
-            flatpak install flathub app.drey.Dialect
+            flatpak install flathub org.signal.Signal -y
+            #flatpak install flathub org.libreoffice.LibreOffice
+            flatpak install flathub app.drey.Dialect -y
             #flatpak install flathub us.zoom.Zoom
             #flatpak install flathub io.freetubeapp.FreeTube
-            flatpak install flathub org.videolan.VLC
-            flatpak install flathub com.usebottles.bottles
-            flatpak install flathub org.gnome.Maps
-            flatpak install flathub org.torproject.torbrowser-launcher
-            flatpak install flathub com.mattjakeman.ExtensionManager
+            flatpak install flathub org.videolan.VLC -y
+            flatpak install flathub com.usebottles.bottles -y
+            #flatpak install flathub org.gnome.Maps
+            flatpak install flathub org.torproject.torbrowser-launcher -y
+            #flatpak install flathub com.mattjakeman.ExtensionManager
             #flatpak install flathub com.github.tchx84.Flatseal
-            dnf insatll syncthing
+            dnf install syncthing
         fi
 
 
     elif [[ "$OS_TYPE" == "UBUNTU" ]]; then
-        redecho "--> snap install codium --classic"
+        redecho "--> snap install codium --classic -y"
         redecho "-->             thunderbird"
         #redecho "-->             mattermost-desktop"
 	    redecho "-->             signal-desktop"
@@ -266,29 +266,29 @@ apps() {
         #redecho "-->             freetube"
         redecho "-->             vlc"
         #redecho "-->             surfshark"
-        redecho "--> apt insatll torbrowser-launcher  #deb"
-        redecho "--> apt insatll gnome-maps  #deb"
-        redecho "--> apt insatll syncthing  #deb"
-        redecho "--> flatpak install flathub com.usebottles.bottles"
+        redecho "--> apt insatll torbrowser-launcher -y  #deb"
+        redecho "-->             gnome-maps  #deb"
+        redecho "-->             syncthing  #deb"
+        redecho "--> flatpak install flathub com.usebottles.bottles -y"
         #redecho "-->flatpak install flathub org.gnome.meld # no snap"
         #redecho "-->flatpak install flathub us.zoom.Zoom # no snap"
         #redecho "-->flatpak install flathub com.mattjakeman.ExtensionManager # no snap"
 
         user_flag=$(get_flag_input)
         if [[ "$user_flag" == 'Y' ]]; then
-            snap install codium --classic
-            snap install thunderbird
+            snap install codium --classic -y
+            snap install thunderbird -y
             #snap install mattermost-desktop
-            snap install signal-desktop
+            snap install signal-desktop -y
             #snap install telegram-desktop
-            snap install libreoffice
-            snap install dialect
+            snap install libreoffice -y
+            snap install dialect -y
             #snap install freetube
-            snap install vlc
+            snap install vlc -y
             #snap install surfshark
-            apt insatll gnome-maps
-            apt insatll syncthing
-            flatpak install flathub com.usebottles.bottles
+            apt insatll gnome-maps -y
+            apt insatll syncthing -y
+            flatpak install flathub com.usebottles.bottles -y
             echo ">>> Get Samsung Magician: https://semiconductor.samsung.com/emea/consumer-storage/support/tools/"
             
             #flatpak install flathub org.gnome.meld # no snap
@@ -305,12 +305,7 @@ apps() {
 dev_tools() {
     clear
     echo ">> Setting Dev environment:"
-    
-    echo ">>> 0. Code repo; Setup GitHub Username"
-    echo "DO:----------"
-    brownecho "cd ~"
-    brownecho "mkdir -p Code"
-    echo "-------------"
+
     if ! command -v git &> /dev/null; then
         redecho ">>>> Git is not installed!"
         redecho "----> apt install git"
@@ -320,6 +315,9 @@ dev_tools() {
             print_underscores
         fi
     fi
+    
+    echo "DO:-------------------------------------------------------------------------------"
+    brownecho "mkdir -p /home/stark/Code"
     brownecho "git config --global user.name \"Devarshi\""
     brownecho "git config --global user.email \"68741497+TheDevarshiShah@users.noreply.github.com\""
     echo "----------------------------------------------------------------------------------"
@@ -332,14 +330,9 @@ dev_tools() {
     echo ""
     brownecho "# Add this to the portal: https://github.com/settings/keys"
     echo "-----------------------------------------------------------------------------------------------------------------"
-    redecho "# Check Clonning"
-    redecho "---> cd ~/Code && mkdir -p Linutzen && cd Linutzen/"
-    redecho "---> git clone git@github.com:TheDevarshiShah/Linutzen.git"
-    user_flag=$(get_flag_input)
-    if [[ "$user_flag" == 'Y' ]]; then
-        cd ~/Code && mkdir -p Linutzen && cd Linutzen/
-        git clone git@github.com:TheDevarshiShah/Linutzen.git
-    fi
+    brownecho "# Check Clonning"
+    brownecho "cd /home/stark/Code && mkdir -p Linutzen && cd Linutzen/"
+    brownecho "git clone git@github.com:TheDevarshiShah/Linutzen.git"
     enter_to_proceed
 
     echo ">>> 1.2 SSH Key-gen for GitLab"
@@ -349,14 +342,9 @@ dev_tools() {
     echo ""
     brownecho "# Add this to the portal: https://collaborating.tuhh.de/-/user_settings/ssh_keys"
     echo "-----------------------------------------------------------------------------------------------------------------"
-    redecho "# Check Clonning"
-    redecho "---> cd ~/Code && mkdir -p BigData2024 && cd BigData2024/"
-    redecho "---> git clone git@collaborating.tuhh.de:cfz2371/bigdata2024.git"
-    user_flag=$(get_flag_input)
-    if [[ "$user_flag" == 'Y' ]]; then
-        cd ~/Code && mkdir -p BigData2024 && cd BigData2024/
-        git clone git@collaborating.tuhh.de:cfz2371/bigdata2024.git
-    fi
+    brownecho "# Check Clonning"
+    brownecho "cd /home/stark/Code && mkdir -p BigData2024 && cd BigData2024/"
+    brownecho "git clone git@collaborating.tuhh.de:cfz2371/bigdata2024.git"
     enter_to_proceed
 
 
